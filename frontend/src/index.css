@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--tg-bg-color);
+    color: var(--tg-text-color);
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-card shadow-card overflow-hidden;
+  }
+
+  .btn-primary {
+    @apply bg-accent text-white font-semibold rounded-xl px-6 py-3
+           active:scale-95 transition-all duration-150
+           disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  .btn-secondary {
+    @apply bg-tg-secondary-bg text-tg-text font-semibold rounded-xl px-6 py-3
+           active:scale-95 transition-all duration-150;
+  }
+
+  .skeleton {
+    @apply bg-gray-200 animate-skeleton rounded;
+  }
+
+  .bottom-nav {
+    @apply fixed bottom-0 left-0 right-0 z-50 bg-tg-bg border-t border-gray-100;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .page-container {
+    @apply pb-20 min-h-screen;
+  }
+
+  .section-title {
+    @apply font-heading font-bold text-lg text-tg-text;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-accent {
+    @apply badge bg-accent/10 text-accent;
+  }
+
+  .badge-success {
+    @apply badge bg-success/10 text-success;
+  }
+
+  .badge-warning {
+    @apply badge bg-warning/10 text-warning;
+  }
+
+  .badge-danger {
+    @apply badge bg-danger/10 text-danger;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+  .text-tg-text { color: var(--tg-text-color); }
+  .text-tg-hint { color: var(--tg-hint-color); }
+  .text-tg-link { color: var(--tg-link-color); }
+  .bg-tg-bg { background-color: var(--tg-bg-color); }
+  .bg-tg-secondary-bg { background-color: var(--tg-secondary-bg); }
+  .border-tg { border-color: var(--tg-hint-color); }
+
+  .safe-area-pb { padding-bottom: env(safe-area-inset-bottom); }
+}

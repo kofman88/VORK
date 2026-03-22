@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>VORK — Фриланс в Telegram</title>
+    <meta name="description" content="Фриланс-маркетплейс в Telegram. Находи исполнителей и заказывай услуги." />
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+      :root {
+        --tg-bg-color: var(--tg-theme-bg-color, #ffffff);
+        --tg-text-color: var(--tg-theme-text-color, #000000);
+        --tg-hint-color: var(--tg-theme-hint-color, #999999);
+        --tg-link-color: var(--tg-theme-link-color, #2481cc);
+        --tg-button-color: var(--tg-theme-button-color, #2481cc);
+        --tg-button-text-color: var(--tg-theme-button-text-color, #ffffff);
+        --tg-secondary-bg: var(--tg-theme-secondary_bg_color, #f1f1f1);
+      }
+      * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+      body {
+        margin: 0;
+        background-color: var(--tg-bg-color);
+        color: var(--tg-text-color);
+        font-family: 'Inter', sans-serif;
+        overflow-x: hidden;
+      }
+      #root { min-height: 100vh; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
