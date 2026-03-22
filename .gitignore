@@ -1,3 +1,8 @@
+# SQLite database
+*.db
+*.db-shm
+*.db-wal
+
 # Environment secrets
 .env
 .env.local
