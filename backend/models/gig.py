@@ -2,9 +2,8 @@ import uuid
 from datetime import datetime
 from sqlalchemy import (
     Column, String, Integer, Boolean, Text,
-    ForeignKey, DateTime, Numeric, func, Index
+    ForeignKey, DateTime, Numeric, func, Index, JSON
 )
-from sqlalchemy.dialects.postgresql import UUID, JSONB, TSVECTOR
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -43,19 +42,19 @@ class Subcategory(Base):
 class Gig(Base):
     __tablename__ = "gigs"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    seller_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    seller_id = Column(String(36), ForeignKey("users.id"), nullable=False, index=True)
     title = Column(String(100), nullable=False)
     description = Column(Text, nullable=False)
     category_id = Column(Integer, ForeignKey("categories.id"), nullable=False)
     subcategory_id = Column(Integer, ForeignKey("subcategories.id"), nullable=True)
-    tags = Column(JSONB, default=list)
-    packages = Column(JSONB, nullable=False, default=list)
+    tags = Column(JSON, default=list)
+    packages = Column(JSON, nullable=False, default=list)
     # [{name, description, price, delivery_days, revisions, features: []}]
-    gallery = Column(JSONB, default=list)
+    gallery = Column(JSON, default=list)
     # [{url, type: image|video, thumbnail}]
     requirements = Column(Text, nullable=True)
-    faq = Column(JSONB, default=list)
+    faq = Column(JSON, default=list)
     # [{question, answer}]
     is_active = Column(Boolean, default=True)
     is_featured = Column(Boolean, default=False)
@@ -64,7 +63,6 @@ class Gig(Base):
     rating = Column(Numeric(3, 2), default=0.00)
     reviews_count = Column(Integer, default=0)
     avg_response_time = Column(Integer, nullable=True)  # minutes
-    search_vector = Column(TSVECTOR, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
@@ -92,9 +90,9 @@ class Gig(Base):
 class Favorite(Base):
     __tablename__ = "favorites"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
-    gig_id = Column(UUID(as_uuid=True), ForeignKey("gigs.id"), nullable=False)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id = Column(String(36), ForeignKey("users.id"), nullable=False)
+    gig_id = Column(String(36), ForeignKey("gigs.id"), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     user = relationship("User", back_populates="favorites")

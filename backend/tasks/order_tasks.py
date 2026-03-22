@@ -1,19 +1,11 @@
-import asyncio
 from datetime import datetime, timezone, timedelta
-from tasks.celery_app import celery_app
 
 
-@celery_app.task(name="tasks.order_tasks.check_deadline_reminders", queue="default")
-def check_deadline_reminders():
+async def check_deadline_reminders():
     """Check orders approaching deadline and send reminders."""
-    asyncio.run(_check_deadline_reminders())
-
-
-async def _check_deadline_reminders():
     from database import AsyncSessionLocal
     from models.order import Order, OrderStatus
-    from models.user import User
-    from sqlalchemy import select, and_
+    from sqlalchemy import select
     from sqlalchemy.orm import selectinload
     from services.notification_service import notify_deadline_reminder
 
@@ -44,13 +36,8 @@ async def _check_deadline_reminders():
                 print(f"Failed to notify for order {order.id}: {e}")
 
 
-@celery_app.task(name="tasks.order_tasks.auto_complete_orders", queue="default")
-def auto_complete_orders():
+async def auto_complete_orders():
     """Auto-complete orders where buyer hasn't responded in 3 days after delivery."""
-    asyncio.run(_auto_complete_orders())
-
-
-async def _auto_complete_orders():
     from database import AsyncSessionLocal
     from models.order import Order, OrderStatus, PaymentMethod
     from models.transaction import Currency

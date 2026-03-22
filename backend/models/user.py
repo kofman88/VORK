@@ -3,9 +3,8 @@ import enum
 from datetime import datetime
 from sqlalchemy import (
     Column, String, BigInteger, Boolean, Integer,
-    Numeric, Text, ForeignKey, DateTime, Enum, func
+    Numeric, Text, ForeignKey, DateTime, Enum, func, JSON
 )
-from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -20,14 +19,14 @@ class UserLevel(str, enum.Enum):
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     telegram_id = Column(BigInteger, unique=True, nullable=False, index=True)
     username = Column(String(255), nullable=True)
     first_name = Column(String(255), nullable=False)
     last_name = Column(String(255), nullable=True)
     avatar_url = Column(String(500), nullable=True)
     bio = Column(Text, nullable=True)
-    skills = Column(JSONB, default=list)
+    skills = Column(JSON, default=list)
     is_freelancer = Column(Boolean, default=False)
     is_verified = Column(Boolean, default=False)
     rating = Column(Numeric(3, 2), default=0.00)
@@ -36,7 +35,7 @@ class User(Base):
     balance = Column(Numeric(12, 2), default=0.00)
     stars_balance = Column(Integer, default=0)
     referral_code = Column(String(20), unique=True, nullable=True)
-    referred_by = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
+    referred_by = Column(String(36), ForeignKey("users.id"), nullable=True)
     language = Column(String(5), default="ru")
     level = Column(Enum(UserLevel), default=UserLevel.NEWBIE)
     last_seen = Column(DateTime(timezone=True), nullable=True)

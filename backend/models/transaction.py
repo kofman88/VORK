@@ -3,7 +3,6 @@ import enum
 from sqlalchemy import (
     Column, String, Integer, Text, ForeignKey, DateTime, Numeric, Enum, func
 )
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -34,9 +33,9 @@ class Currency(str, enum.Enum):
 class Transaction(Base):
     __tablename__ = "transactions"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
-    order_id = Column(UUID(as_uuid=True), ForeignKey("orders.id"), nullable=True)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id = Column(String(36), ForeignKey("users.id"), nullable=False, index=True)
+    order_id = Column(String(36), ForeignKey("orders.id"), nullable=True)
     type = Column(Enum(TransactionType), nullable=False)
     amount = Column(Numeric(12, 2), nullable=True)
     stars_amount = Column(Integer, nullable=True)

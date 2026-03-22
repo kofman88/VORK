@@ -1,9 +1,8 @@
 import uuid
 import enum
 from sqlalchemy import (
-    Column, String, Boolean, Text, ForeignKey, DateTime, Enum, func
+    Column, String, Boolean, Text, ForeignKey, DateTime, Enum, func, JSON
 )
-from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -19,12 +18,12 @@ class MessageType(str, enum.Enum):
 class Message(Base):
     __tablename__ = "messages"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    order_id = Column(UUID(as_uuid=True), ForeignKey("orders.id"), nullable=True, index=True)
-    sender_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
-    receiver_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    order_id = Column(String(36), ForeignKey("orders.id"), nullable=True, index=True)
+    sender_id = Column(String(36), ForeignKey("users.id"), nullable=False, index=True)
+    receiver_id = Column(String(36), ForeignKey("users.id"), nullable=False, index=True)
     content = Column(Text, nullable=True)
-    attachments = Column(JSONB, default=list)
+    attachments = Column(JSON, default=list)
     message_type = Column(Enum(MessageType), default=MessageType.TEXT)
     is_read = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())

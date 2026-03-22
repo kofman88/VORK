@@ -3,9 +3,8 @@ import enum
 from datetime import datetime
 from sqlalchemy import (
     Column, String, Integer, Boolean, Text,
-    ForeignKey, DateTime, Numeric, Enum, func
+    ForeignKey, DateTime, Numeric, Enum, func, JSON
 )
-from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -29,15 +28,15 @@ class PaymentMethod(str, enum.Enum):
 class Order(Base):
     __tablename__ = "orders"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     order_number = Column(String(20), unique=True, nullable=False)
-    gig_id = Column(UUID(as_uuid=True), ForeignKey("gigs.id"), nullable=False, index=True)
-    buyer_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
-    seller_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
+    gig_id = Column(String(36), ForeignKey("gigs.id"), nullable=False, index=True)
+    buyer_id = Column(String(36), ForeignKey("users.id"), nullable=False, index=True)
+    seller_id = Column(String(36), ForeignKey("users.id"), nullable=False, index=True)
     package_name = Column(String(50), nullable=False)
-    package_snapshot = Column(JSONB, nullable=False)
+    package_snapshot = Column(JSON, nullable=False)
     requirements_text = Column(Text, nullable=True)
-    requirements_files = Column(JSONB, default=list)
+    requirements_files = Column(JSON, default=list)
     status = Column(Enum(OrderStatus), default=OrderStatus.PENDING, nullable=False)
     price = Column(Numeric(12, 2), nullable=False)
     stars_price = Column(Integer, nullable=True)
@@ -45,9 +44,9 @@ class Order(Base):
     delivery_deadline = Column(DateTime(timezone=True), nullable=True)
     revision_deadline = Column(DateTime(timezone=True), nullable=True)
     revisions_used = Column(Integer, default=0)
-    delivery_files = Column(JSONB, default=list)
+    delivery_files = Column(JSON, default=list)
     delivery_note = Column(Text, nullable=True)
-    cancelled_by = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
+    cancelled_by = Column(String(36), ForeignKey("users.id"), nullable=True)
     cancel_reason = Column(Text, nullable=True)
     dispute_reason = Column(Text, nullable=True)
     is_rated_by_buyer = Column(Boolean, default=False)

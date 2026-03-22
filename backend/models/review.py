@@ -1,8 +1,7 @@
 import uuid
 from sqlalchemy import (
-    Column, Integer, Boolean, Text, ForeignKey, DateTime, func
+    Column, String, Integer, Boolean, Text, ForeignKey, DateTime, func
 )
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -10,11 +9,11 @@ from database import Base
 class Review(Base):
     __tablename__ = "reviews"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    order_id = Column(UUID(as_uuid=True), ForeignKey("orders.id"), unique=True, nullable=False)
-    reviewer_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
-    reviewee_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
-    gig_id = Column(UUID(as_uuid=True), ForeignKey("gigs.id"), nullable=False, index=True)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    order_id = Column(String(36), ForeignKey("orders.id"), unique=True, nullable=False)
+    reviewer_id = Column(String(36), ForeignKey("users.id"), nullable=False, index=True)
+    reviewee_id = Column(String(36), ForeignKey("users.id"), nullable=False, index=True)
+    gig_id = Column(String(36), ForeignKey("gigs.id"), nullable=False, index=True)
     rating = Column(Integer, nullable=False)
     communication_rating = Column(Integer, nullable=False)
     quality_rating = Column(Integer, nullable=False)

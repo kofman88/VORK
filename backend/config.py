@@ -8,10 +8,7 @@ class Settings(BaseSettings):
     WEBAPP_URL: str = "http://localhost:5173"
 
     # Database
-    DATABASE_URL: str = "postgresql+asyncpg://vork:vorkpassword@localhost:5432/vork_db"
-
-    # Redis
-    REDIS_URL: str = "redis://localhost:6379/0"
+    DATABASE_URL: str = "sqlite+aiosqlite:///./vork.db"
 
     # JWT
     JWT_SECRET: str = "super-secret-key-change-in-production"

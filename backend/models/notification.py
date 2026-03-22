@@ -1,9 +1,8 @@
 import uuid
 import enum
 from sqlalchemy import (
-    Column, String, Boolean, Text, ForeignKey, DateTime, Enum, func
+    Column, String, Boolean, Text, ForeignKey, DateTime, Enum, func, JSON
 )
-from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -24,12 +23,12 @@ class NotificationType(str, enum.Enum):
 class Notification(Base):
     __tablename__ = "notifications"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id = Column(String(36), ForeignKey("users.id"), nullable=False, index=True)
     type = Column(Enum(NotificationType), nullable=False)
     title = Column(String(255), nullable=False)
     body = Column(Text, nullable=False)
-    data = Column(JSONB, default=dict)
+    data = Column(JSON, default=dict)
     is_read = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
